@@ -10,17 +10,17 @@ import UIKit
 class HabitViewController: UIViewController {
     
     private var habit: Habit?
+    
     var onRemove = {}
     
     private lazy var scrollView: UIScrollView = {
-           let scrollView = UIScrollView()
-           scrollView.translatesAutoresizingMaskIntoConstraints = false
-           return scrollView
-       }()
+        let scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        return scrollView
+    }()
     
     private lazy var contentView: UIView = {
         let view = UIView()
-        view.backgroundColor = .white
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -153,14 +153,11 @@ class HabitViewController: UIViewController {
 extension HabitViewController {
     private func setupNavigationBar() {
         if habit == nil {
-            
             navigationItem.title = "Создать"
             navigationItem.largeTitleDisplayMode = .never
             navigationController?.navigationBar.tintColor = .purpleColor
-            
             let rightBarButtonItem = UIBarButtonItem(title: "Сохранить", style: .done, target: self, action: #selector(onSaveButton))
             navigationItem.rightBarButtonItem = rightBarButtonItem
-            
             let leftBarButtonItem = UIBarButtonItem(title: "Отменить", style: .done, target: self, action: #selector(onCancelButton))
             navigationItem.leftBarButtonItem = leftBarButtonItem
             
@@ -168,10 +165,8 @@ extension HabitViewController {
         } else {
             navigationItem.title = "Править"
             navigationController?.navigationBar.tintColor = .purpleColor
-            
             let rightBarButtonItem = UIBarButtonItem(title: "Сохранить", style: .done, target: self, action: #selector(onSaveButton))
             navigationItem.rightBarButtonItem = rightBarButtonItem
-            
             let leftBarButtonItem = UIBarButtonItem(title: "Отменить", style: .done, target: self, action: #selector(onCancelButton))
             navigationItem.leftBarButtonItem = leftBarButtonItem
             
@@ -186,7 +181,9 @@ extension HabitViewController {
         
         scrollView.addSubview(contentView)
         
-        contentView.addSubviews(nameTitleLabel, nameTextField, colorTitleLabel, colorButton, timeTitleLabel, timeLabel, setTimeLabel, timePicker, deleteButton)
+        contentView.addSubviews(nameTitleLabel, nameTextField, colorTitleLabel, colorButton, timeTitleLabel, timeLabel, setTimeLabel, timePicker)
+        
+        view.addSubview(deleteButton)
     }
 }
 
@@ -201,7 +198,7 @@ extension HabitViewController {
             contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
             contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
             contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-            contentView.bottomAnchor.constraint(equalTo: scrollView.safeAreaLayoutGuide.bottomAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
             
             nameTitleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 21),
@@ -210,6 +207,7 @@ extension HabitViewController {
             nameTextField.topAnchor.constraint(equalTo: nameTitleLabel.bottomAnchor, constant: 7),
             nameTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15),
             nameTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            nameTextField.heightAnchor.constraint(equalToConstant: 22),
             
             colorTitleLabel.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 15),
             colorTitleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
@@ -229,11 +227,13 @@ extension HabitViewController {
             setTimeLabel.leadingAnchor.constraint(equalTo: timeLabel.trailingAnchor),
             
             timePicker.topAnchor.constraint(equalTo: timeLabel.bottomAnchor, constant: 15),
-            timePicker.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            timePicker.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 15),
+            timePicker.heightAnchor.constraint(equalToConstant: 216),
             timePicker.widthAnchor.constraint(equalTo: contentView.widthAnchor),
             
-            deleteButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -52),
-            deleteButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor)
+            deleteButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -52),
+            deleteButton.heightAnchor.constraint(equalToConstant: 22),
+            deleteButton.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ]
         .forEach {$0.isActive = true}
     }
@@ -243,6 +243,13 @@ extension HabitViewController {
     
     @objc func onSaveButton() {
         if habit == nil {
+            guard let text = nameTextField.text, !text.isEmpty else {
+                let alertVC = UIAlertController(title: "Внимание!", message: "Введите название привычки", preferredStyle: .alert)
+                let action = UIAlertAction(title: "Ok", style: .destructive, handler: nil)
+                alertVC.addAction(action)
+                self.present(alertVC, animated: true, completion: nil)
+                return
+            }
             let habit = Habit(name: nameTextField.text!, date: timePicker.date, color: colorButton.backgroundColor!)
             let store = HabitsStore.shared
             store.habits.append(habit)
@@ -260,9 +267,9 @@ extension HabitViewController {
     @objc func OnDeleteButton() {
         
         if let habit = habit {
-            let alertVC = UIAlertController(title: "Удалить привычку", message: "Вы хотите удалить привычку \(habit.name)?", preferredStyle: UIAlertController.Style.alert)
+            let alertVC = UIAlertController(title: "Удалить привычку", message: "Вы действительно хотите удалить привычку \"\(habit.name)\"?", preferredStyle: UIAlertController.Style.alert)
             let cancel = UIAlertAction(title: "Отмена", style: .cancel, handler: nil)
-            let delete = UIAlertAction(title: "Удалить", style: .default) { UIAlertAction in
+            let delete = UIAlertAction(title: "Удалить", style: .destructive) { UIAlertAction in
                 self.deleteHabit()
             }
             alertVC.addAction(cancel)
@@ -270,7 +277,7 @@ extension HabitViewController {
             self.present(alertVC, animated: true, completion: nil)
         }
     }
-        
+    
     func deleteHabit() {
         HabitsStore.shared.habits.removeAll{$0 == self.habit}
         dismiss(animated: false, completion: onRemove)

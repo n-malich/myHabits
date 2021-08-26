@@ -54,16 +54,16 @@ class InfoViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-
+        
         setupNavigationBar()
         setupViews()
         setupConstraints()
     }
-
+    
 }
 
 extension InfoViewController {

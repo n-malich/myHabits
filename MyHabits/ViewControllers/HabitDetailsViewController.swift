@@ -105,8 +105,9 @@ extension HabitDetailsViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "habitDetailsID", for: indexPath)
-        cell.textLabel?.text = HabitsStore.shared.trackDateString(forIndex: indexPath.row)
-        let date = HabitsStore.shared.dates[indexPath.row]
+        let habitIndex = abs(indexPath.row - HabitsStore.shared.dates.count + 1)
+        cell.textLabel?.text = HabitsStore.shared.trackDateString(forIndex: habitIndex)
+        let date = HabitsStore.shared.dates[habitIndex]
         if HabitsStore.shared.habit(habit, isTrackedIn: date) {
             cell.accessoryType = UITableViewCell.AccessoryType.checkmark
             cell.tintColor = .purpleColor

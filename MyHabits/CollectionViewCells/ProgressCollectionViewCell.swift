@@ -40,8 +40,8 @@ class ProgressCollectionViewCell: UICollectionViewCell {
         super.init(frame: frame)
         contentView.layer.cornerRadius = 10
         contentView.backgroundColor = .white
-                   setupViews()
-                   setupConstraints()
+        setupViews()
+        setupConstraints()
     }
     
     required init?(coder: NSCoder) {

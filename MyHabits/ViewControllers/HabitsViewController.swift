@@ -10,14 +10,14 @@ import UIKit
 class HabitsViewController: UIViewController {
     
     private lazy var collectionView: UICollectionView = {
-            let layout = UICollectionViewFlowLayout()
-            let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-            collectionView.translatesAutoresizingMaskIntoConstraints = false
-            return collectionView
-        }()
+        let layout = UICollectionViewFlowLayout()
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        return collectionView
+    }()
     
     private lazy var appearance = UINavigationBarAppearance()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigationBar()
@@ -26,7 +26,7 @@ class HabitsViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-            super.viewWillAppear(true)
+        super.viewWillAppear(true)
         collectionView.reloadData()
     }
 }
@@ -36,9 +36,10 @@ extension HabitsViewController {
         navigationItem.title = "Сегодня"
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationItem.largeTitleDisplayMode = .always
+        navigationController?.navigationBar.isTranslucent = true
         appearance.backgroundColor = .navigationColor
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
-
+        
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(onCreateHabit))
     }
     
@@ -51,30 +52,30 @@ extension HabitsViewController {
 }
 
 extension HabitsViewController {
-     private func setupViews() {
+    private func setupViews() {
         view.backgroundColor = .white
         view.addSubview(collectionView)
         collectionView.backgroundColor = .lightGrayColor
         
         collectionView.register(ProgressCollectionViewCell.self, forCellWithReuseIdentifier: "progressID")
         collectionView.register(HabitCollectionViewCell.self, forCellWithReuseIdentifier: "habitID")
-         
+        
         collectionView.dataSource = self
         collectionView.delegate = self
-     }
- }
+    }
+}
 
- extension HabitsViewController {
-     private func setupConstraints() {
-         [
+extension HabitsViewController {
+    private func setupConstraints() {
+        [
             collectionView.topAnchor.constraint(equalTo: view.topAnchor),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-         ]
-         .forEach {$0.isActive = true}
-     }
- }
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+        ]
+        .forEach {$0.isActive = true}
+    }
+}
 
 extension HabitsViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -88,7 +89,7 @@ extension HabitsViewController: UICollectionViewDataSource {
             return HabitsStore.shared.habits.count
         }
     }
-
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if indexPath.section == 0 {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "progressID", for: indexPath) as! ProgressCollectionViewCell
@@ -112,7 +113,7 @@ extension HabitsViewController: UICollectionViewDataSource {
 extension HabitsViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt IndexPath: IndexPath) -> CGSize {
         if IndexPath.section == 0 {
-           return CGSize(width: view.bounds.width - 32, height: 60)
+            return CGSize(width: view.bounds.width - 32, height: 60)
         } else {
             return CGSize(width: view.bounds.width - 32, height: 130)
         }

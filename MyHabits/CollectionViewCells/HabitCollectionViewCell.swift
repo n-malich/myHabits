@@ -101,11 +101,11 @@ extension HabitCollectionViewCell {
         [
             nameLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
             nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            nameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -88),
             
             timeLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 4),
             timeLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             
-            counterLabel.topAnchor.constraint(equalTo: timeLabel.bottomAnchor, constant: 30),
             counterLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             counterLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),
             
