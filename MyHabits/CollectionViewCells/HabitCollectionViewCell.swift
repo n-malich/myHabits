@@ -27,7 +27,7 @@ class HabitCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    var onHabitTrack = {}
+    var onHabitTrack: () -> Void = {}
     
     private lazy var nameLabel: UILabel = {
         let label = UILabel()
@@ -70,8 +70,8 @@ class HabitCollectionViewCell: UICollectionViewCell {
         
         contentView.layer.cornerRadius = 10
         contentView.backgroundColor = .white
-                   setupViews()
-                   setupConstraints()
+        setupViews()
+        setupConstraints()
     }
     
     required init?(coder: NSCoder) {

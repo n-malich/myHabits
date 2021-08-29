@@ -11,7 +11,7 @@ class HabitViewController: UIViewController {
     
     private var habit: Habit?
     
-    var onRemove = {}
+    var onRemove: () -> Void = {}
     
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -242,24 +242,30 @@ extension HabitViewController {
 extension HabitViewController {
     
     @objc func onSaveButton() {
-        if habit == nil {
-            guard let text = nameTextField.text, !text.isEmpty else {
-                let alertVC = UIAlertController(title: "Внимание!", message: "Введите название привычки", preferredStyle: .alert)
-                let action = UIAlertAction(title: "Ok", style: .destructive, handler: nil)
-                alertVC.addAction(action)
-                self.present(alertVC, animated: true, completion: nil)
+        guard let text = nameTextField.text, !text.isEmpty else {
+            let alertVC = UIAlertController(title: "Внимание!", message: "Введите название привычки", preferredStyle: .alert)
+            let action = UIAlertAction(title: "Ok", style: .destructive, handler: nil)
+            alertVC.addAction(action)
+            self.present(alertVC, animated: true, completion: nil)
+            return
+        }
+        guard let color = colorButton.backgroundColor else {
+            return
+        }
+        
+        if let habit = habit {
+            guard let index = HabitsStore.shared.habits.firstIndex(of: habit) else {
                 return
             }
-            let habit = Habit(name: nameTextField.text!, date: timePicker.date, color: colorButton.backgroundColor!)
-            let store = HabitsStore.shared
-            store.habits.append(habit)
+            habit.name = text
+            habit.color = color
+            habit.date = timePicker.date
+            HabitsStore.shared.habits[index] = habit
             dismiss(animated: true, completion: nil)
         } else {
-            let index = HabitsStore.shared.habits.firstIndex(of: habit!)
-            habit!.name = nameTextField.text!
-            habit!.color = colorButton.backgroundColor!
-            habit!.date = timePicker.date
-            HabitsStore.shared.habits[index!] = habit!
+            let habit = Habit(name: text, date: timePicker.date, color: color)
+            let store = HabitsStore.shared
+            store.habits.append(habit)
             dismiss(animated: true, completion: nil)
         }
     }
@@ -290,7 +296,7 @@ extension HabitViewController {
     @objc func onColorButton() {
         let colorPicker = UIColorPickerViewController()
         colorPicker.delegate = self
-        colorPicker.selectedColor = self.colorButton.backgroundColor!
+        colorPicker.selectedColor = self.colorButton.backgroundColor ?? .white
         self.present(colorPicker, animated: true, completion: nil)
     }
     

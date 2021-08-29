@@ -20,7 +20,6 @@ class ProgressCollectionViewCell: UICollectionViewCell {
     
     private lazy var percentLabel: UILabel = {
         let label = UILabel()
-        label.text = "\(Int(HabitsStore.shared.todayProgress * 100))%"
         label.font = .footnoteStatus
         label.textColor = .systemGray
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -31,7 +30,6 @@ class ProgressCollectionViewCell: UICollectionViewCell {
         let progressView = UIProgressView()
         progressView.trackTintColor = .systemGray
         progressView.progressTintColor = .purpleColor
-        progressView.setProgress(HabitsStore.shared.todayProgress, animated: true)
         progressView.translatesAutoresizingMaskIntoConstraints = false
         return progressView
     }()
@@ -42,10 +40,16 @@ class ProgressCollectionViewCell: UICollectionViewCell {
         contentView.backgroundColor = .white
         setupViews()
         setupConstraints()
+        refreshProgress()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func refreshProgress() -> Void {
+        percentLabel.text = "\(Int(HabitsStore.shared.todayProgress * 100))%"
+        progressView.setProgress(HabitsStore.shared.todayProgress, animated: true)
     }
 }
 

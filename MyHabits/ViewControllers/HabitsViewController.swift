@@ -93,6 +93,7 @@ extension HabitsViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if indexPath.section == 0 {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "progressID", for: indexPath) as! ProgressCollectionViewCell
+            cell.refreshProgress()
             return cell
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "habitID", for: indexPath) as! HabitCollectionViewCell
