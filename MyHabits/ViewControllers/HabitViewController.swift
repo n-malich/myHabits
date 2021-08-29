@@ -11,7 +11,7 @@ class HabitViewController: UIViewController {
     
     private var habit: Habit?
     
-    var onRemove: () -> Void = {}
+    var onRemove: (() -> Void)?
     
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -30,7 +30,6 @@ class HabitViewController: UIViewController {
         label.text = "НАЗВАНИЕ"
         label.font = .footnoteBold
         label.textColor = .black
-        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
@@ -42,7 +41,6 @@ class HabitViewController: UIViewController {
         textField.clearButtonMode = UITextField.ViewMode.whileEditing
         textField.clipsToBounds = true
         textField.returnKeyType = UIReturnKeyType.done
-        textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
     }()
     
@@ -51,7 +49,6 @@ class HabitViewController: UIViewController {
         label.text = "ЦВЕТ"
         label.font = .footnoteBold
         label.textColor = .black
-        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
@@ -60,7 +57,6 @@ class HabitViewController: UIViewController {
         button.backgroundColor = .orangeColor
         button.layer.cornerRadius = 15
         button.addTarget(self, action: #selector(onColorButton), for: .touchUpInside)
-        button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
@@ -69,7 +65,6 @@ class HabitViewController: UIViewController {
         label.text = "ВРЕМЯ"
         label.font = .footnoteBold
         label.textColor = .black
-        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
@@ -78,7 +73,6 @@ class HabitViewController: UIViewController {
         label.text = "Каждый день в "
         label.font = .body
         label.textColor = .black
-        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
@@ -86,7 +80,6 @@ class HabitViewController: UIViewController {
         let label = UILabel()
         label.textColor = .purpleColor
         label.font = .body
-        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
@@ -95,7 +88,6 @@ class HabitViewController: UIViewController {
         picker.datePickerMode = .time
         picker.preferredDatePickerStyle = .wheels
         picker.addTarget(self, action: #selector(setTime), for: .valueChanged)
-        picker.translatesAutoresizingMaskIntoConstraints = false
         return picker
     }()
     
@@ -275,8 +267,8 @@ extension HabitViewController {
         if let habit = habit {
             let alertVC = UIAlertController(title: "Удалить привычку", message: "Вы действительно хотите удалить привычку \"\(habit.name)\"?", preferredStyle: UIAlertController.Style.alert)
             let cancel = UIAlertAction(title: "Отмена", style: .cancel, handler: nil)
-            let delete = UIAlertAction(title: "Удалить", style: .destructive) { UIAlertAction in
-                self.deleteHabit()
+            let delete = UIAlertAction(title: "Удалить", style: .destructive) { [weak self] _ in
+                self?.deleteHabit()
             }
             alertVC.addAction(cancel)
             alertVC.addAction(delete)
@@ -335,8 +327,8 @@ extension HabitViewController {
 extension HabitViewController: UITextFieldDelegate {
     //Скрытие keyboard при нажатии за пределами TextField
     func setupHideKeyboardOnTap() {
-        self.view.addGestureRecognizer(self.endEditingRecognizer())
-        self.navigationController?.navigationBar.addGestureRecognizer(self.endEditingRecognizer())
+        view.addGestureRecognizer(self.endEditingRecognizer())
+        navigationController?.navigationBar.addGestureRecognizer(self.endEditingRecognizer())
     }
     
     private func endEditingRecognizer() -> UIGestureRecognizer {

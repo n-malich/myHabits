@@ -45,6 +45,7 @@ class HabitDetailsViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
         navigationItem.title = "\(habit.name)"
     }
 }
@@ -63,7 +64,9 @@ extension HabitDetailsViewController {
 extension HabitDetailsViewController {
     @objc func onEditHabit() {
         let habitVC = HabitViewController(habit: habit)
-        habitVC.onRemove = {self.navigationController?.popToRootViewController(animated: false)}
+        habitVC.onRemove = { [weak self] in
+            self?.navigationController?.popToRootViewController(animated: false)
+        }
         let habitNavigationVC = UINavigationController(rootViewController: habitVC)
         habitNavigationVC.modalPresentationStyle = .fullScreen
         present(habitNavigationVC, animated: true, completion: nil)

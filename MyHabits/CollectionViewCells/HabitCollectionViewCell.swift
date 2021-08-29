@@ -27,13 +27,12 @@ class HabitCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    var onHabitTrack: () -> Void = {}
+    var onHabitTrack: (() -> Void)?
     
     private lazy var nameLabel: UILabel = {
         let label = UILabel()
         label.font = .headLine
         label.numberOfLines = 2
-        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
@@ -41,7 +40,6 @@ class HabitCollectionViewCell: UICollectionViewCell {
         let label = UILabel()
         label.font = .caption
         label.textColor = .systemGray2
-        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
@@ -49,7 +47,6 @@ class HabitCollectionViewCell: UICollectionViewCell {
         let label = UILabel()
         label.font = .footnote
         label.textColor = .systemGray
-        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
@@ -85,7 +82,7 @@ extension HabitCollectionViewCell {
             colorButton.backgroundColor = habit?.color
             HabitsStore.shared.track(habit!)
             counterLabel.text = "Счётчик: \(habit!.trackDates.count)"
-            onHabitTrack()
+            onHabitTrack?()
         }
     }
 }

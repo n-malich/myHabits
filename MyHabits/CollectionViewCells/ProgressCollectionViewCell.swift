@@ -14,7 +14,6 @@ class ProgressCollectionViewCell: UICollectionViewCell {
         label.text = "Всё получится!"
         label.font = .footnoteStatus
         label.textColor = .systemGray
-        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
@@ -22,7 +21,6 @@ class ProgressCollectionViewCell: UICollectionViewCell {
         let label = UILabel()
         label.font = .footnoteStatus
         label.textColor = .systemGray
-        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
@@ -30,7 +28,6 @@ class ProgressCollectionViewCell: UICollectionViewCell {
         let progressView = UIProgressView()
         progressView.trackTintColor = .systemGray
         progressView.progressTintColor = .purpleColor
-        progressView.translatesAutoresizingMaskIntoConstraints = false
         return progressView
     }()
     

@@ -27,7 +27,6 @@ class InfoViewController: UIViewController {
         label.text = "Привычка за 21 день"
         label.font = .title3
         label.textColor = .black
-        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
@@ -51,7 +50,6 @@ class InfoViewController: UIViewController {
 """
         label.font = .body
         label.textColor = .black
-        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
